@@ -131,7 +131,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }).then(
       () => this.router.navigate(['categories', category.id, 'edit'])
     )
-
   }
 
   private actionsForError(error) {
