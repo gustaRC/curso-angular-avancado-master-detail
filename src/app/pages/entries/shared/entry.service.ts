@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Entry } from './entries.model';
+import { Entry } from './entry.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +65,9 @@ export class EntryService {
 
   private jsonDataToEntries(jsonData: any[]): Entry[] {
     const entries: Entry[] = [];
-    jsonData.forEach(element => entries.push(element as Entry));
+    jsonData.forEach(element => entries.push(
+      Object.assign(new Entry(), element)
+    ));
     return entries;
   }
 
