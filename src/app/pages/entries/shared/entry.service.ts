@@ -1,0 +1,81 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Entry } from './entries.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EntryService {
+
+  private apiPath: string = 'api/entries'; //requisição do in-memory-database
+
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  getAll(): Observable<Entry[]> {
+    return this.http.get<Entry[]>(this.apiPath)
+      .pipe(
+        catchError(this.handleError),
+        map(this.jsonDataToEntries)
+      );
+  }
+
+  getById(id: number): Observable<Entry> {
+    const url = `${this.apiPath}/${id}`;
+
+    return this.http.get<Entry>(url)
+      .pipe(
+        catchError(this.handleError),
+        map(this.jsonDataToEntry)
+      );
+  }
+
+  create(entry: Entry): Observable<Entry> {
+    return this.http.post<Entry>(this.apiPath, entry)
+      .pipe(
+        catchError(this.handleError),
+        map(this.jsonDataToEntry)
+      );
+  }
+
+  update(entry: Entry): Observable<Entry> {
+    const url = `${this.apiPath}/${entry.id}`;
+
+    return this.http.put<Entry>(url, entry)
+      .pipe(
+        catchError(this.handleError),
+        map(() => entry)
+      );
+  }
+
+  delete(id: number): Observable<any> {
+    const url = `${this.apiPath}/${id}`;
+
+    return this.http.delete(url)
+      .pipe(
+        catchError(this.handleError),
+        map(() => null)
+      );
+  }
+
+  //PRIVATE METHODS
+
+  private jsonDataToEntries(jsonData: any[]): Entry[] {
+    const entries: Entry[] = [];
+    jsonData.forEach(element => entries.push(element as Entry));
+    return entries;
+  }
+
+  private jsonDataToEntry(jsonData: any): Entry {
+    return jsonData as Entry;
+  }
+
+  private handleError(error: any): Observable<any> {
+    console.log('ERRO NA REQUISIÇÃO => ', error);
+    return throwError(error);
+  }
+
+}
