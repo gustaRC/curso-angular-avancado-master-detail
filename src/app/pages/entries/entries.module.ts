@@ -17,7 +17,7 @@ import { CalendarModule } from "primeng/calendar";
   imports: [
     CommonModule,
     EntriesRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
     CalendarModule,
     IMaskModule
   ]
