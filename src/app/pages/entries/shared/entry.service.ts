@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, flatMap, map } from 'rxjs/operators';
 import { Entry } from './entry.model';
+import { CategoryService } from '../../categories/shared/category.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class EntryService {
   private apiPath: string = 'api/entries'; //requisição do in-memory-database
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private categoryService: CategoryService
   ) { }
 
   getAll(): Observable<Entry[]> {
@@ -34,21 +36,39 @@ export class EntryService {
   }
 
   create(entry: Entry): Observable<Entry> {
-    return this.http.post<Entry>(this.apiPath, entry)
+    //configuração do Category no objeto Entry
+    return this.categoryService.getById(entry.categoryId)
       .pipe(
-        catchError(this.handleError),
-        map(this.jsonDataToEntry)
-      );
+        flatMap(category => { //flatMap substituido pelo mergeMap
+          entry.category = category;
+
+          //post entry
+          return this.http.post<Entry>(this.apiPath, entry)
+          .pipe(
+            catchError(this.handleError),
+            map(this.jsonDataToEntry)
+          );
+        })
+      )
   }
 
   update(entry: Entry): Observable<Entry> {
     const url = `${this.apiPath}/${entry.id}`;
 
-    return this.http.put<Entry>(url, entry)
+    //configuração do Category no objeto Entry
+    return this.categoryService.getById(entry.categoryId)
       .pipe(
-        catchError(this.handleError),
-        map(() => entry)
-      );
+        flatMap(category => { //flatMap substituido pelo mergeMap
+          entry.category = category;
+
+          //put entry
+          return this.http.put<Entry>(url, entry)
+          .pipe(
+            catchError(this.handleError),
+            map(() => entry)
+          );
+        })
+      )
   }
 
   delete(id: number): Observable<any> {
