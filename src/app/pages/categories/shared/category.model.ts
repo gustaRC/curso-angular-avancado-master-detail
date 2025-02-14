@@ -8,4 +8,8 @@ export class Category extends BaseResourceModel {
   ){
     super(); //chamando o constructor da classe extensora/extend === BaseResourceModel
   }
+
+  static fromJson(jsonData: any): Category {
+    return Object.assign(new Category(), jsonData); //cria um objeto vazio e atribui os valores do jsonData
+  }
 }
