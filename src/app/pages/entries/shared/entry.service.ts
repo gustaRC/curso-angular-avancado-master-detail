@@ -22,11 +22,13 @@ export class EntryService extends BaseResourceService<Entry>{
   }
 
   create(entry: Entry): Observable<Entry> {
-    return this.setCategoryAndSendToServer(entry, super.create.bind(this)); //super - Não está sendo executado! Sendo passado somente a sintaxe
+    return this.setCategoryAndSendToServer(entry, super.create.bind(this));
+    //super - Não está sendo executado agora! Sendo passado somente a sintaxe
   }
 
   update(entry: Entry): Observable<Entry> {
-    return this.setCategoryAndSendToServer(entry, super.update.bind(this)); //super - Não está sendo executado! Sendo passado somente a sintaxe
+    return this.setCategoryAndSendToServer(entry, super.update.bind(this));
+    //super - Não está sendo executado agora! Sendo passado somente a sintaxe
   }
 
   private setCategoryAndSendToServer(entry: Entry, sendFn: any): Observable<Entry> {
@@ -36,10 +38,9 @@ export class EntryService extends BaseResourceService<Entry>{
         flatMap(category => {
           entry.category = category;
 
-          //post entry
-          return sendFn(entry); //CHAMANDO O METODO DA CLASSE PAI
+          return sendFn(entry);
         }),
-        catchError(this.handleError) //metodo da classe BASE
+        catchError(this.handleError) //metodo da classe BASE para erros
       )
   }
 
