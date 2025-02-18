@@ -78,7 +78,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
       this.pageTitle = this.creationPageTitle();
     }
     else {
-      this.pageTitle = 'Editando Categoria: ' + this.editionPageTitle();
+      this.pageTitle = this.editionPageTitle();
     }
   }
 
