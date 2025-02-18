@@ -99,7 +99,6 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
         resource => this.actionForSucess(resource),
         error => this.actionsForError(error)
       )
-
   }
 
   protected updateResource() {
@@ -111,7 +110,6 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
         resource => this.actionForSucess(resource),
         error => this.actionsForError(error)
       )
-
   }
 
   protected actionForSucess(category) {
@@ -120,9 +118,9 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     const baseComponentPath = this.route.snapshot.parent.url[0].path;
 
     //force reload component page
-    //1. categories/new | 2. categories/ | 3. categories/:id/edit
+    //1. page/new | 2. page/ | 3. page/:id/edit
 
-    this.router.navigateByUrl( "categories", {
+    this.router.navigateByUrl( baseComponentPath, {
       skipLocationChange: true
     }).then(
       () => this.router.navigate([baseComponentPath, category.id, 'edit'])
