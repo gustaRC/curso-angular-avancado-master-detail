@@ -1,37 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../shared/category.service';
 import { Category } from '../shared/category.model';
+import { BaseResourceListComponent } from 'src/app/shared/components/base-resource-list/base-resource-list.component';
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })
-export class CategoryListComponent implements OnInit {
-
-  categories: Category[] = [];
+export class CategoryListComponent extends BaseResourceListComponent<Category> implements OnInit{
 
   constructor(
     private categoryService: CategoryService,
-  ) { }
-
-  ngOnInit() {
-    this.categoryService.getAll().subscribe(
-      (response: Category[]) => this.categories = response,
-      () => alert('Erro ao carregar a lista!')
+  ) {
+    super(
+      categoryService
     );
   }
 
-  deleteCategory(category: Category) {
-    const mustDelete = confirm('Deseja realmente excluir este item?');
-
-    if (mustDelete) {
-      this.categoryService.delete(category.id).subscribe(
-        () => this.categories = this.categories.filter(element => element != category),
-        () => alert('Erro ao tentar excluir!')
-      );
-    }
-
+  deleteConfirmationTitle(): string {
+    return "Deseja realmente excluir está categoria?";
   }
 
 }
