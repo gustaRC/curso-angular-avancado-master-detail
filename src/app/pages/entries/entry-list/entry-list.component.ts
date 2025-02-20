@@ -1,3 +1,4 @@
+import { BaseResourceListComponent } from 'src/app/shared/components/base-resource-list/base-resource-list.component';
 import { Component, OnInit } from '@angular/core';
 import { EntryService } from '../shared/entry.service';
 import { Entry } from '../shared/entry.model';
@@ -8,31 +9,18 @@ import { Entry } from '../shared/entry.model';
   templateUrl: './entry-list.component.html',
   styleUrls: ['./entry-list.component.scss']
 })
-export class EntryListComponent implements OnInit {
-
-  entries: Entry[] = [];
+export class EntryListComponent extends BaseResourceListComponent<Entry> implements OnInit {
 
   constructor(
     private entryService: EntryService,
-  ) { }
-
-  ngOnInit() {
-    this.entryService.getAll().subscribe(
-      (response: Entry[]) => this.entries = response.sort((a, b) => b.id - a.id),
-      () => alert('Erro ao carregar a lista!')
-    );
+  ) {
+    super(
+      entryService
+    )
   }
 
-  deleteEntry(entry: Entry) {
-    const mustDelete = confirm('Deseja realmente excluir este item?');
-
-    if (mustDelete) {
-      this.entryService.delete(entry.id).subscribe(
-        () => this.entries = this.entries.filter(element => element != entry),
-        () => alert('Erro ao tentar excluir!')
-      );
-    }
-
+  protected deleteConfirmationTitle(): string {
+    return "Deseja realmente excluir este lançamento?";
   }
 
 }
