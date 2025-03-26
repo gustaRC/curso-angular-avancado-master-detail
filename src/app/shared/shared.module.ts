@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BreadCumpComponent } from './components/bread-cump/bread-cump.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [BreadCumpComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -11,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     CommonModule,
     ReactiveFormsModule,
+    BreadCumpComponent
   ]
 })
 export class SharedModule { }
